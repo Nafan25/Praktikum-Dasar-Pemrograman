@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define MAX_BARANG 100
+#define MAX_BARANG 10
 
 typedef struct {
     char nama[50];
@@ -26,11 +26,15 @@ void tambahBarang(Barang *b, int *count) {
 }
 
 void tampilkanStruk(Barang *b, int count) {
+    float totalHargaSebelumDiskon = 0;  // Variabel untuk menyimpan total harga sebelum diskon
+    float totalHargaSetelahDiskon = 0;  // Variabel untuk menyimpan total harga setelah diskon
+
     printf("\n--- Struk Pembelian ---\n");
     for (int i = 0; i < count; i++) {
         float totalHarga = b[i].harga * b[i].jumlah;
         float hargaDiskon = totalHarga - (totalHarga * (b[i].diskon / 100));
         
+        // Tampilkan detail setiap barang
         printf("\nBarang %d:\n", i + 1);
         printf("Nama Barang: %s\n", b[i].nama);
         printf("Harga: %.2f\n", b[i].harga);
@@ -38,7 +42,15 @@ void tampilkanStruk(Barang *b, int count) {
         printf("Diskon: %.2f%%\n", b[i].diskon);
         printf("Harga Sebelum Diskon: %.2f\n", totalHarga);
         printf("Harga Setelah Diskon: %.2f\n", hargaDiskon);
+
+        // Tambahkan harga sebelum dan setelah diskon ke total keseluruhan
+        totalHargaSebelumDiskon += totalHarga;
+        totalHargaSetelahDiskon += hargaDiskon;
     }
+    
+    // Tampilkan total keseluruhan
+    printf("\nTotal Harga Sebelum Diskon: %.2f\n", totalHargaSebelumDiskon);
+    printf("Total Harga Setelah Diskon: %.2f\n", totalHargaSetelahDiskon);
     printf("-----------------------\n");
 }
 
