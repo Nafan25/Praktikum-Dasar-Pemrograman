@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define a struct to represent a product
+typedef struct {
+    char nama[50];
+    int harga;
+    int jumlah;
+    float diskon;
+} Barang;
+
+// Define a struct to represent the cash register
+typedef struct {
+    Barang *barang;
+    int jumlah_barang;
+} MesinKasir;
+
+// Function to add a product to the cash register
+void tambah_barang(MesinKasir *mesin_kasir, char nama[], int harga, int jumlah, float diskon) {
+    strcpy(mesin_kasir->barang[mesin_kasir->jumlah_barang].nama, nama);
+    mesin_kasir->barang[mesin_kasir->jumlah_barang].harga = harga;
+    mesin_kasir->barang[mesin_kasir->jumlah_barang].jumlah = jumlah;
+    mesin_kasir->barang[mesin_kasir->jumlah_barang].diskon = diskon;
+    mesin_kasir->jumlah_barang++;
+}
+
+// Function to display the receipt
+void tampilkan_struk(MesinKasir mesin_kasir) {
+    int total_sebelum_diskon = 0;
+    float total_setelah_diskon = 0.0;
+    printf("===============================Struk Belanja=============================== \n");
+    printf("=========================================================================== \n");
+    for (int i = 0; i < mesin_kasir.jumlah_barang; i++) {
+        printf("%d. %s x %d = Rp %d\n", i + 1, mesin_kasir.barang[i].nama, mesin_kasir.barang[i].jumlah, mesin_kasir.barang[i].harga * mesin_kasir.barang[i].jumlah);
+        printf("  Diskon: %.2f%%\n", mesin_kasir.barang[i].diskon);
+        printf("  Harga setelah diskon: Rp %.2f\n", (mesin_kasir.barang[i].harga * mesin_kasir.barang[i].jumlah) - (mesin_kasir.barang[i].harga * mesin_kasir.barang[i].jumlah * mesin_kasir.barang[i].diskon / 100));
+        total_sebelum_diskon += mesin_kasir.barang[i].harga * mesin_kasir.barang[i].jumlah;
+        total_setelah_diskon += (mesin_kasir.barang[i].harga * mesin_kasir.barang[i].jumlah) - (mesin_kasir.barang[i].harga * mesin_kasir.barang[i].jumlah * mesin_kasir.barang[i].diskon / 100);
+    }
+    printf("Total sebelum diskon: Rp %d\n", total_sebelum_diskon);
+    printf("Total setelah diskon: Rp %.2f\n", total_setelah_diskon);
+}
+
+int main() {
+    MesinKasir mesin_kasir;
+    mesin_kasir.barang = (Barang *) malloc(sizeof(Barang) * 10);
+    mesin_kasir.jumlah_barang = 0;
+    while (1) {
+        printf("Menu:\n");
+        printf("1. Tambah Barang\n");
+        printf("2. Tampilkan Struk\n");
+        printf("3. Keluar\n");
+        int pilihan;
+        scanf("%d", &pilihan);
+        if (pilihan == 1) {
+            char nama[50];
+            int harga, jumlah;
+            float diskon;
+            printf("Nama: ");
+            scanf("%s", nama);
+            printf("Harga: ");
+            scanf("%d", &harga);
+            printf("Jumlah: ");
+            scanf("%d", &jumlah);
+            printf("Diskon (%): ");
+            scanf("%f", &diskon);
+            tambah_barang(&mesin_kasir, nama, harga, jumlah, diskon);
+        } else if (pilihan == 2) {
+            tampilkan_struk(mesin_kasir);
+        } else if (pilihan == 3) {
+            break;
+        }
+    }
+    free(mesin_kasir.barang);
+    return 0;
+}
