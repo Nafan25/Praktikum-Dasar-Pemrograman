@@ -1,70 +1,74 @@
 #include <stdio.h>
-#include <string.h>
 
 #define MAX_BARANG 100
-#define NAMA_MAX 50
 
 typedef struct {
-    char nama[NAMA_MAX];
+    char nama[50];
     float harga;
     int jumlah;
-    float diskon; // Diskon dalam persen
+    float diskon;
 } Barang;
+
+void tambahBarang(Barang *b, int *count) {
+    if (*count < MAX_BARANG) {
+        printf("Masukkan nama barang: ");
+        scanf("%s", b[*count].nama);
+        printf("Masukkan harga barang: ");
+        scanf("%f", &b[*count].harga);
+        printf("Masukkan jumlah barang: ");
+        scanf("%d", &b[*count].jumlah);
+        printf("Masukkan diskon (dalam persen): ");
+        scanf("%f", &b[*count].diskon);
+        (*count)++;
+    } else {
+        printf("Batas maksimum barang telah tercapai!\n");
+    }
+}
+
+void tampilkanStruk(Barang *b, int count) {
+    printf("\n--- Struk Pembelian ---\n");
+    for (int i = 0; i < count; i++) {
+        float totalHarga = b[i].harga * b[i].jumlah;
+        float hargaDiskon = totalHarga - (totalHarga * (b[i].diskon / 100));
+        
+        printf("\nBarang %d:\n", i + 1);
+        printf("Nama Barang: %s\n", b[i].nama);
+        printf("Harga: %.2f\n", b[i].harga);
+        printf("Jumlah: %d\n", b[i].jumlah);
+        printf("Diskon: %.2f%%\n", b[i].diskon);
+        printf("Harga Sebelum Diskon: %.2f\n", totalHarga);
+        printf("Harga Setelah Diskon: %.2f\n", hargaDiskon);
+    }
+    printf("-----------------------\n");
+}
 
 int main() {
     Barang barang[MAX_BARANG];
-    int jumlah_barang = 0;
-    char lagi;
+    int count = 0;
+    int pilihan;
 
     do {
-        if (jumlah_barang >= MAX_BARANG) {
-            printf("Jumlah barang sudah maksimal.\n");
-            break;
+        printf("\n--- Menu Mesin Kasir ---\n");
+        printf("1. Tambah Barang\n");
+        printf("2. Tampilkan Struk\n");
+        printf("3. Keluar\n");
+        printf("Pilih opsi (1-3): ");
+        scanf("%d", &pilihan);
+
+        switch (pilihan) {
+            case 1:
+                tambahBarang(barang, &count);
+                break;
+            case 2:
+                tampilkanStruk(barang, count);
+                break;
+            case 3:
+                printf("Terima kasih! Selamat tinggal.\n");
+                break;
+            default:
+                printf("Pilihan tidak valid! Silakan coba lagi.\n");
         }
-
-        printf("\nMasukkan nama barang: ");
-        scanf("%s", barang[jumlah_barang].nama);
-        
-        printf("Masukkan harga barang: ");
-        scanf("%f", &barang[jumlah_barang].harga);
-        
-        printf("Masukkan jumlah barang: ");
-        scanf("%d", &barang[jumlah_barang].jumlah);
-        
-        printf("Masukkan diskon (dalam persen): ");
-        scanf("%f", &barang[jumlah_barang].diskon);
-        
-        jumlah_barang++;
-
-        printf("Apakah Anda ingin memasukkan barang lagi? (y/n): ");
-        scanf(" %c", &lagi);
-
-    } while (lagi == 'y' || lagi == 'Y');
-
-    printf("\nRincian Belanja:\n");
-    printf("%-20s %-10s %-10s %-10s %-15s %-15s\n", "Nama Barang", "Harga", "Jumlah", "Diskon", "Total Sebelum Diskon", "Total Setelah Diskon");
-    
-    float grand_total_sebelum = 0, grand_total_setelah = 0;
-
-    for (int i = 0; i < jumlah_barang; i++) {
-        float total_sebelum = barang[i].harga * barang[i].jumlah;
-        float total_setelah = total_sebelum * (1 - (barang[i].diskon / 100));
-
-        printf("%-20s %-10.2f %-10d %-10.2f %-15.2f %-15.2f\n", 
-                barang[i].nama, 
-                barang[i].harga, 
-                barang[i].jumlah, 
-                barang[i].diskon, 
-                total_sebelum, 
-                total_setelah);
-
-        grand_total_sebelum += total_sebelum;
-        grand_total_setelah += total_setelah;
-    }
-
-    printf("\nGrand Total Sebelum Diskon: %.2f\n", grand_total_sebelum);
-    printf("Grand Total Setelah Diskon: %.2f\n", grand_total_setelah);
+    } while (pilihan != 3);
 
     return 0;
 }
-
